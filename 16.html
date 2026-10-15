@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordinal Numbers Interactive Worksheet | المعلم: ماجد السويهري</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka, Baloo 2, & Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Cairo:wght@600;700;800;900&family=Fredoka:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Fredoka', 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #fef9c3 0%, #ffedd5 30%, #fce7f3 60%, #e0e7ff 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 3D Balloon Title Typography */
+        .title-3d-blue {
+            color: #0284c7;
+            -webkit-text-stroke: 2.5px #0369a1;
+            text-shadow: 
+                0 3px 0 #0284c7,
+                0 6px 0 #075985,
+                0 10px 18px rgba(3, 105, 161, 0.45);
+        }
+
+        /* Wooden Hanging Plaque */
+        .wooden-sign {
+            background: linear-gradient(180deg, #ddb372 0%, #c59751 45%, #b17e37 70%, #8f5c1d 100%);
+            border: 3.5px solid #5a380e;
+            box-shadow: 
+                0 8px 18px rgba(0, 0, 0, 0.25),
+                inset 0 2px 3px rgba(255, 255, 255, 0.4),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+            border-radius: 14px;
+            transform: rotate(-3deg);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .wooden-sign:hover {
+            transform: rotate(0deg) scale(1.02);
+            box-shadow: 0 12px 22px rgba(0,0,0,0.3);
+        }
+
+        .sign-rope-left, .sign-rope-right {
+            position: absolute;
+            top: -24px;
+            width: 4px;
+            height: 26px;
+            background: linear-gradient(to bottom, #784712, #a16220);
+            border-radius: 2px;
+        }
+        .sign-rope-left { left: 22px; transform: rotate(-10deg); }
+        .sign-rope-right { right: 22px; transform: rotate(10deg); }
+
+        /* Main Worksheet Paper Frame */
+        .worksheet-frame {
+            background-color: #fffef8;
+            background-image: 
+                radial-gradient(#fcd34d 1.1px, transparent 1.1px),
+                radial-gradient(#93c5fd 1.1px, transparent 1.1px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            border: 6px solid #fbcfe8;
+            border-radius: 36px;
+            box-shadow: 
+                0 20px 45px -10px rgba(0, 0, 0, 0.16),
+                0 0 0 4px #bae6fd,
+                0 0 0 8px #fef08a;
+        }
+
+        /* Circular Slot for Exercise 1 */
+        .ordinal-circle-slot {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.18);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            position: relative;
+        }
+        .ordinal-circle-slot:hover {
+            transform: scale(1.08);
+            border-color: #0284c7;
+        }
+        .ordinal-circle-slot.drag-over {
+            border-color: #0284c7;
+            transform: scale(1.12);
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.4);
+        }
+
+        /* Draggable / Selectable Ordinal Chip */
+        .ordinal-chip {
+            cursor: grab;
+            user-select: none;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .ordinal-chip:active {
+            cursor: grabbing;
+            transform: scale(0.94);
+        }
+        .ordinal-chip.selected {
+            ring: 3px solid #0284c7;
+            transform: translateY(-3px) scale(1.08);
+            box-shadow: 0 8px 16px rgba(2, 132, 199, 0.35);
+        }
+
+        /* Authentic Hand-Drawn Oval Circling for Exercise 2 */
+        .word-circle-btn {
+            position: relative;
+            padding: 4px 16px;
+            border-radius: 9999px;
+            transition: all 0.2s ease;
+            user-select: none;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .word-circle-btn:hover {
+            color: #0284c7;
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+        .word-circle-btn.circled {
+            color: #0369a1;
+            font-weight: 800;
+        }
+        .word-circle-btn.circled::after {
+            content: '';
+            position: absolute;
+            inset: -4px -10px;
+            border: 2.8px solid #0284c7;
+            border-radius: 9999px;
+            transform: rotate(-2.5deg);
+            background: rgba(56, 189, 248, 0.12);
+            box-shadow: 0 2px 6px rgba(2, 132, 199, 0.2);
+            pointer-events: none;
+            animation: circle-pop 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes circle-pop {
+            0% { transform: scale(0.7) rotate(-5deg); opacity: 0; }
+            100% { transform: scale(1) rotate(-2.5deg); opacity: 1; }
+        }
+
+        /* Evaluation states */
+        .eval-correct {
+            border-color: #10b981 !important;
+            background-color: #ecfdf5 !important;
+            color: #065f46 !important;
+        }
+        .eval-wrong {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #991b1b !important;
+        }
+    </style>
+</head>
+<body class="p-2 sm:p-4 md:p-6 text-slate-800">
+
+    <div class="max-w-3xl mx-auto worksheet-frame p-4 sm:p-7 relative">
+
+        <!-- Top Utility Controls Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b-2 border-dashed border-amber-200">
+            <!-- Voice selection and speech rate -->
+            <div class="flex items-center gap-2 flex-wrap">
+                <div class="flex items-center bg-white px-2.5 py-1 rounded-xl border border-sky-200 shadow-xs">
+                    <span class="text-xs font-bold text-sky-700 mr-1.5 flex items-center gap-1">🎙️ Voice:</span>
+                    <select id="voiceSelect" onchange="changeVoice()" class="text-xs font-semibold text-slate-700 bg-transparent outline-none max-w-[130px] sm:max-w-[180px] cursor-pointer">
+                        <option value="">Auto Natural Voice</option>
+                    </select>
+                </div>
+                <button onclick="toggleSpeechRate()" id="speedBtn" class="bg-white hover:bg-sky-50 text-slate-700 px-3 py-1 rounded-xl text-xs font-bold border border-sky-200 shadow-xs flex items-center gap-1 transition-all">
+                    <span>🐇</span>
+                    <span id="speedLabel">Normal</span>
+                </button>
+            </div>
+
+            <!-- Score Summary & Audio FX Toggle -->
+            <div class="flex items-center gap-2">
+                <div class="bg-white px-3 py-1 rounded-xl border border-amber-300 shadow-xs flex items-center gap-1 text-xs font-black text-amber-700">
+                    <span>⭐ Score:</span>
+                    <span id="liveScoreLabel">0</span>
+                    <span>/ 18</span>
+                </div>
+                <button onclick="toggleAudioFX()" id="soundToggleBtn" class="bg-white hover:bg-slate-50 text-slate-700 p-1.5 px-2.5 rounded-xl text-xs font-bold border border-slate-200 shadow-xs" title="Mute/Unmute Audio FX">
+                    🔊
+                </button>
+            </div>
+        </div>
+
+        <!-- Header: Wooden Sign & LANGUA LEARN Logo -->
+        <div class="relative mt-4 mb-2 pt-2">
+            <div class="flex items-start justify-between">
+                <!-- Wooden Hanging Sign (المعلم: ماجد السويهري) -->
+                <div class="relative z-10 shrink-0 cursor-pointer" onclick="greetTeacher()" title="Click to greet Teacher Majed">
+                    <div class="sign-rope-left"></div>
+                    <div class="sign-rope-right"></div>
+                    <div class="wooden-sign px-3 sm:px-4 py-1.5 text-center shadow-lg">
+                        <div class="text-[10px] sm:text-[11px] font-black text-amber-100 font-cairo">المعلم:</div>
+                        <div class="text-xs sm:text-sm font-black text-white font-cairo tracking-wide drop-shadow-sm">ماجد السويهري</div>
+                    </div>
+                </div>
+
+                <!-- LANGUA LEARN Brand Box -->
+                <div class="bg-white/95 px-3 py-1.5 rounded-2xl border-2 border-rose-200 shadow-xs flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white text-base font-bold shadow-xs">
+                        🎓
+                    </div>
+                    <div class="text-left">
+                        <div class="text-xs sm:text-sm font-black text-slate-800 tracking-tight leading-none">LANGUA LEARN</div>
+                        <div class="text-[9px] text-rose-500 font-bold uppercase tracking-wider">Learn, Grow, Succeed</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Big 3D Cartoon Title: ORDINAL NUMBERS -->
+            <div class="text-center mt-2 mb-3">
+                <div class="flex items-center justify-center gap-1.5 mb-1">
+                    <span class="text-xl">⭐</span>
+                    <span class="text-2xl font-black text-sky-500">✨</span>
+                    <span class="text-xl">🎈</span>
+                    <span class="text-2xl font-black text-amber-500">🎉</span>
+                    <span class="text-xl">⭐</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-black title-3d-blue tracking-tight">
+                    ORDINAL NUMBERS
+                </h1>
+                <p class="text-xs sm:text-sm font-bold text-slate-600 font-cairo mt-1">
+                    تمرين تفاعلي لتثبيت الأعداد الترتيبية واختصاراتها وكتابتها
+                </p>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- EXERCISE 1: Write the following numbers as numbers -->
+        <!-- ======================================================== -->
+        <div class="mb-6 bg-white/90 rounded-3xl p-3 sm:p-5 border-3 border-amber-200 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <h2 class="text-base sm:text-lg font-black text-slate-800 tracking-tight flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center text-xs">1</span>
+                    <span>Write the following numbers as numbers</span>
+                </h2>
+                <span class="text-xs font-bold text-slate-500 font-cairo">اسحب أو اضغط على الرقم وضعه في الدائرة المناسبة</span>
+            </div>
+
+            <!-- Draggable / Selectable Number Bank for Exercise 1 -->
+            <div class="mb-4 p-2.5 bg-amber-50 rounded-2xl border-2 border-dashed border-amber-300">
+                <div class="text-[11px] font-black text-amber-800 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                    <span>📦 Number Bank (بنك الأرقام الترتيبية):</span>
+                    <span id="bankCountLabel" class="text-slate-500 font-bold">9 numbers left</span>
+                </div>
+                <div id="exercise1Bank" class="flex flex-wrap items-center gap-2 justify-center min-h-[44px]">
+                    <!-- Dynamically populated chips -->
+                </div>
+            </div>
+
+            <!-- 2-Column Board Matching the Exact Worksheet Layout -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <!-- Left Column (Warm Cream/Yellow Container) -->
+                <div class="bg-[#fefce8] p-3 sm:p-4 rounded-2xl border-2 border-amber-200 space-y-2.5">
+                    <!-- Item 1 (Example): First -> 1st -->
+                    <div class="flex items-center gap-3">
+                        <div class="ordinal-circle-slot bg-[#bae6fd] text-[#0369a1] border-[#38bdf8] cursor-default" title="Example">
+                            1st
+                        </div>
+                        <div class="flex-1 flex items-center justify-between border-b-2 border-slate-700 pb-1 cursor-pointer" onclick="speakWord('First')">
+                            <span class="text-base font-black text-slate-800">First</span>
+                            <span class="text-xs font-bold text-slate-400 font-cairo">الأول (مثال)</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 2: Ninth -->
+                    <div class="flex items-center gap-3">
+                        <div class="ordinal-circle-slot bg-[#ffedd5] text-[#ea580c] border-[#fdba74]" data-target="9th" id="slot-Ninth" onclick="handleSlotClick('Ninth')"></div>
+                        <div class="flex-1 flex items-center justify-between border-b-2 border-slate-700 pb-1 cursor-pointer" onclick="speakWord('Ninth')">
+                            <span class="text-base font-black text-slate-800">Ninth</span>
+                            <span class="text-xs font-bold text-slate-400 font-cairo">التاسع</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 3: Fourth -->
+                    <div class="flex items-center gap-3">
+                        <div class="ordinal-circle-slot bg-[#ffe4e6] text-[#e11d48] border-[#fda4af]" data-target="4th" id="slot-Fourth" onclick="handleSlotClick('Fourth')"></div>
+                        <div class="flex-1 flex items-center justify-between border-b-2 border-slate-700 pb-1 cursor-pointer" onclick="speakWord('Fourth')">
+                            <span class="text-base font-black text-slate-800">Fourth</span>
+                            <span class="text-xs font-bold text-slate-400 font-cairo">الرابع</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 4: Seventh -->
+                    <div class="flex items-center gap-3">
+                        <div class="ordinal-circle-slot bg-[#dcfce7] text-[#16a34a] border-[#86efac]" data-target="7th" id="slot-Seventh" onclick="handleSlotClick('Seventh')"></div>
+                        <div class="flex-1 flex items-center justify-between border-b-2 border-slate-700 pb-1 cursor-pointer" onclick="speakWord('Seventh')">
+                            <span class="text-base font-black text-slate-800">Seventh</span>
+                            <span class="text-xs font-bold text-slate-400 font-cairo">السابع</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 5: Fifth -->
+                    <div class="flex items-center gap-3">
+                        <div class="ordinal-circle-slot bg-[#f3e8ff] text-[#9333ea] border-[#d8b4fe]" data-target="5th" id="slot-Fifth" onclick="handleSlotClick('Fifth')"></div>
+                        <div class="flex-1 flex items-center justify-between border-b-2 border-slate-700 pb-1 cursor-pointer" onclick="speakWord('Fifth')">
+                            <span class="text-base font-black text-slate-800">Fifth</span>
+                            <span class="text-xs font-bold text-slate-400 font-cairo">الخامس</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column (Soft Sky/Mint Container) -->
+                <div class="bg-[#f0f9ff] p-3 sm:p-4 rounded-2xl border-2 border-sky-200 space-y-2.5">
+                    <!-- Item 6: Third -->
+                    <div class="flex items-center gap-3">
+                        <div class="ordinal-circle-slot bg-[#ffe4e6] text-[#e11d48] border-[#f43f5e]" data-target="3rd" id="slot-Third" onclick="handleSlotClick('Third')"></div>
+                        <div class="flex-1 flex items-center justify-between border-b-2 border-slate-700 pb-1 cursor-pointer" onclick="speakWord('Third')">
+                            <span class="text-base font-black text-slate-800">Third</span>
+                            <span class="text-xs font-bold text-slate-400 font-cairo">الثالث</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 7: Eighth -->
+                    <div class="flex items-center gap-3">
+                        <div class="ordinal-circle-slot bg-[#fef9c3] text-[#ca8a04] border-[#fde047]" data-target="8th" id="slot-Eighth" onclick="handleSlotClick('Eighth')"></div>
+                        <div class="flex-1 flex items-center justify-between border-b-2 border-slate-700 pb-1 cursor-pointer" onclick="speakWord('Eighth')">
+                            <span class="text-base font-black text-slate-800">Eighth</span>
+                            <span class="text-xs font-bold text-slate-400 font-cairo">الثامن</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 8: Second -->
+                    <div class="flex items-center gap-3">
+                        <div class="ordinal-circle-slot bg-[#f3e8ff] text-[#7e22ce] border-[#c084fc]" data-target="2nd" id="slot-Second" onclick="handleSlotClick('Second')"></div>
+                        <div class="flex-1 flex items-center justify-between border-b-2 border-slate-700 pb-1 cursor-pointer" onclick="speakWord('Second')">
+                            <span class="text-base font-black text-slate-800">Second</span>
+                            <span class="text-xs font-bold text-slate-400 font-cairo">الثاني</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 9: Tenth -->
+                    <div class="flex items-center gap-3">
+                        <div class="ordinal-circle-slot bg-[#dcfce7] text-[#15803d] border-[#4ade80]" data-target="10th" id="slot-Tenth" onclick="handleSlotClick('Tenth')"></div>
+                        <div class="flex-1 flex items-center justify-between border-b-2 border-slate-700 pb-1 cursor-pointer" onclick="speakWord('Tenth')">
+                            <span class="text-base font-black text-slate-800">Tenth</span>
+                            <span class="text-xs font-bold text-slate-400 font-cairo">العاشر</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 10: Sixth -->
+                    <div class="flex items-center gap-3">
+                        <div class="ordinal-circle-slot bg-[#e0f2fe] text-[#0369a1] border-[#7dd3fc]" data-target="6th" id="slot-Sixth" onclick="handleSlotClick('Sixth')"></div>
+                        <div class="flex-1 flex items-center justify-between border-b-2 border-slate-700 pb-1 cursor-pointer" onclick="speakWord('Sixth')">
+                            <span class="text-base font-black text-slate-800">Sixth</span>
+                            <span class="text-xs font-bold text-slate-400 font-cairo">السادس</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- EXERCISE 2: Circle the correct words to name the numbers -->
+        <!-- ======================================================== -->
+        <div class="mb-6 bg-white/90 rounded-3xl p-3 sm:p-5 border-3 border-sky-200 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <h2 class="text-base sm:text-lg font-black text-slate-800 tracking-tight flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs">2</span>
+                    <span>Circle the correct words to name the numbers.</span>
+                </h2>
+                <span class="text-xs font-bold text-slate-500 font-cairo">اضغط على الكلمة الصحيحة لوضع دائرة حولها</span>
+            </div>
+
+            <!-- 9 Pill Rows Exactly Matching the Worksheet Colors -->
+            <div class="space-y-2" id="circleRowsContainer">
+                <!-- Row 1: 11th -> eleventh vs eleven -->
+                <div class="circle-row flex items-center rounded-2xl border border-teal-300 bg-[#ccfbf1]/80 px-3 py-1.5 shadow-2xs" data-num="11th" data-correct="eleventh">
+                    <div class="w-14 sm:w-16 py-1 bg-teal-500 text-white font-black text-xs sm:text-sm rounded-xl text-center shadow-xs shrink-0 cursor-pointer" onclick="speakWord('11th')">
+                        11th
+                    </div>
+                    <div class="flex-1 flex items-center justify-around px-2 text-sm sm:text-base font-bold">
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'eleventh')">eleventh</button>
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'eleven')">eleven</button>
+                    </div>
+                </div>
+
+                <!-- Row 2: 3rd -> three vs third -->
+                <div class="circle-row flex items-center rounded-2xl border border-purple-300 bg-[#f3e8ff]/80 px-3 py-1.5 shadow-2xs" data-num="3rd" data-correct="third">
+                    <div class="w-14 sm:w-16 py-1 bg-purple-600 text-white font-black text-xs sm:text-sm rounded-xl text-center shadow-xs shrink-0 cursor-pointer" onclick="speakWord('3rd')">
+                        3rd
+                    </div>
+                    <div class="flex-1 flex items-center justify-around px-2 text-sm sm:text-base font-bold">
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'three')">three</button>
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'third')">third</button>
+                    </div>
+                </div>
+
+                <!-- Row 3: 20th -> twentieth vs twenty -->
+                <div class="circle-row flex items-center rounded-2xl border border-rose-300 bg-[#ffe4e6]/80 px-3 py-1.5 shadow-2xs" data-num="20th" data-correct="twentieth">
+                    <div class="w-14 sm:w-16 py-1 bg-rose-500 text-white font-black text-xs sm:text-sm rounded-xl text-center shadow-xs shrink-0 cursor-pointer" onclick="speakWord('20th')">
+                        20th
+                    </div>
+                    <div class="flex-1 flex items-center justify-around px-2 text-sm sm:text-base font-bold">
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'twentieth')">twentieth</button>
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'twenty')">twenty</button>
+                    </div>
+                </div>
+
+                <!-- Row 4: 2nd -> second vs two -->
+                <div class="circle-row flex items-center rounded-2xl border border-amber-300 bg-[#fef9c3]/80 px-3 py-1.5 shadow-2xs" data-num="2nd" data-correct="second">
+                    <div class="w-14 sm:w-16 py-1 bg-amber-500 text-white font-black text-xs sm:text-sm rounded-xl text-center shadow-xs shrink-0 cursor-pointer" onclick="speakWord('2nd')">
+                        2nd
+                    </div>
+                    <div class="flex-1 flex items-center justify-around px-2 text-sm sm:text-base font-bold">
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'second')">second</button>
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'two')">two</button>
+                    </div>
+                </div>
+
+                <!-- Row 5: 1st -> one vs first -->
+                <div class="circle-row flex items-center rounded-2xl border border-sky-300 bg-[#e0f2fe]/80 px-3 py-1.5 shadow-2xs" data-num="1st" data-correct="first">
+                    <div class="w-14 sm:w-16 py-1 bg-sky-500 text-white font-black text-xs sm:text-sm rounded-xl text-center shadow-xs shrink-0 cursor-pointer" onclick="speakWord('1st')">
+                        1st
+                    </div>
+                    <div class="flex-1 flex items-center justify-around px-2 text-sm sm:text-base font-bold">
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'one')">one</button>
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'first')">first</button>
+                    </div>
+                </div>
+
+                <!-- Row 6: 18th -> eighteen vs eighteenth -->
+                <div class="circle-row flex items-center rounded-2xl border border-pink-300 bg-[#fce7f3]/80 px-3 py-1.5 shadow-2xs" data-num="18th" data-correct="eighteenth">
+                    <div class="w-14 sm:w-16 py-1 bg-pink-500 text-white font-black text-xs sm:text-sm rounded-xl text-center shadow-xs shrink-0 cursor-pointer" onclick="speakWord('18th')">
+                        18th
+                    </div>
+                    <div class="flex-1 flex items-center justify-around px-2 text-sm sm:text-base font-bold">
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'eighteen')">eighteen</button>
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'eighteenth')">eighteenth</button>
+                    </div>
+                </div>
+
+                <!-- Row 7: 15th -> fifteenth vs fifteen -->
+                <div class="circle-row flex items-center rounded-2xl border border-green-300 bg-[#dcfce7]/80 px-3 py-1.5 shadow-2xs" data-num="15th" data-correct="fifteenth">
+                    <div class="w-14 sm:w-16 py-1 bg-green-600 text-white font-black text-xs sm:text-sm rounded-xl text-center shadow-xs shrink-0 cursor-pointer" onclick="speakWord('15th')">
+                        15th
+                    </div>
+                    <div class="flex-1 flex items-center justify-around px-2 text-sm sm:text-base font-bold">
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'fifteenth')">fifteenth</button>
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'fifteen')">fifteen</button>
+                    </div>
+                </div>
+
+                <!-- Row 8: 13th -> thirteen vs thirteenth -->
+                <div class="circle-row flex items-center rounded-2xl border border-teal-300 bg-[#ccfbf1]/80 px-3 py-1.5 shadow-2xs" data-num="13th" data-correct="thirteenth">
+                    <div class="w-14 sm:w-16 py-1 bg-teal-600 text-white font-black text-xs sm:text-sm rounded-xl text-center shadow-xs shrink-0 cursor-pointer" onclick="speakWord('13th')">
+                        13th
+                    </div>
+                    <div class="flex-1 flex items-center justify-around px-2 text-sm sm:text-base font-bold">
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'thirteen')">thirteen</button>
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'thirteenth')">thirteenth</button>
+                    </div>
+                </div>
+
+                <!-- Row 9: 7th -> seven vs seventh -->
+                <div class="circle-row flex items-center rounded-2xl border border-purple-300 bg-[#fae8ff]/80 px-3 py-1.5 shadow-2xs" data-num="7th" data-correct="seventh">
+                    <div class="w-14 sm:w-16 py-1 bg-purple-500 text-white font-black text-xs sm:text-sm rounded-xl text-center shadow-xs shrink-0 cursor-pointer" onclick="speakWord('7th')">
+                        7th
+                    </div>
+                    <div class="flex-1 flex items-center justify-around px-2 text-sm sm:text-base font-bold">
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'seven')">seven</button>
+                        <button type="button" class="word-circle-btn" onclick="selectCircleWord(this, 'seventh')">seventh</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Action Controls: Check & Reset -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <button onclick="resetWorksheet()" class="px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-700 rounded-2xl border-2 border-slate-200 font-bold text-xs sm:text-sm shadow-xs transition-all active:scale-95 flex items-center gap-1.5">
+                <span>🔄</span>
+                <span>إعادة المحاولة (Reset)</span>
+            </button>
+
+            <div id="statusMessage" class="text-xs sm:text-sm font-black font-cairo text-slate-600 text-center flex-1">
+                املأ الفراغات وضع دائرة حول الكلمات ثم اضغط فحص الإجابات ⭐
+            </div>
+
+            <button onclick="checkAllAnswers()" class="px-6 py-2.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 hover:from-emerald-600 hover:to-sky-600 text-white font-black text-xs sm:text-sm rounded-2xl shadow-md transition-all active:scale-95 flex items-center gap-2">
+                <span>✅</span>
+                <span>فحص الإجابات (Check Answers)</span>
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Data for Exercise 1
+        const EXERCISE_1_DATA = [
+            { word: 'Ninth', target: '9th' },
+            { word: 'Fourth', target: '4th' },
+            { word: 'Seventh', target: '7th' },
+            { word: 'Fifth', target: '5th' },
+            { word: 'Third', target: '3rd' },
+            { word: 'Eighth', target: '8th' },
+            { word: 'Second', target: '2nd' },
+            { word: 'Tenth', target: '10th' },
+            { word: 'Sixth', target: '6th' }
+        ];
+
+        // State variables
+        let selectedChipVal = null;
+        let slotPlacements = {}; // { 'Ninth': '9th', ... }
+        let circleSelections = {}; // { '11th': 'eleventh', ... }
+        let soundEffectsEnabled = true;
+        let isSlowSpeech = false;
+        let availableVoices = [];
+        let selectedVoice = null;
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtxClass) audioCtx = new AudioCtxClass();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
+        }
+
+        function playTone(type) {
+            if (!soundEffectsEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'tap') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.exponentialRampToValueAtTime(560, now + 0.06);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.07);
+                    osc.start(now);
+                    osc.stop(now + 0.07);
+                } else if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    osc.frequency.setValueAtTime(783.99, now + 0.16);
+                    gain.gain.setValueAtTime(0.18, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(160, now + 0.15);
+                    gain.gain.setValueAtTime(0.16, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.22);
+                    osc.start(now);
+                    osc.stop(now + 0.22);
+                }
+            } catch (e) {
+                console.warn(e);
+            }
+        }
+
+        function loadVoices() {
+            if (!('speechSynthesis' in window)) return;
+            const voices = window.speechSynthesis.getVoices();
+            if (!voices || voices.length === 0) return;
+
+            availableVoices = voices.filter(v => v.lang.startsWith('en'));
+            const selectEl = document.getElementById('voiceSelect');
+            if (!selectEl) return;
+            selectEl.innerHTML = '<option value="">Auto Natural Voice</option>';
+
+            availableVoices.forEach((v, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = `${v.name} (${v.lang})`;
+                selectEl.appendChild(opt);
+            });
+
+            const best = availableVoices.find(v => 
+                v.name.includes('Natural') || 
+                v.name.includes('Google US') || 
+                v.name.includes('Samantha') || 
+                v.name.includes('Jenny')
+            );
+            if (best) selectedVoice = best;
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+            loadVoices();
+        }
+
+        function changeVoice() {
+            const val = document.getElementById('voiceSelect').value;
+            selectedVoice = val === '' ? null : availableVoices[parseInt(val, 10)] || null;
+        }
+
+        function toggleSpeechRate() {
+            isSlowSpeech = !isSlowSpeech;
+            document.getElementById('speedLabel').textContent = isSlowSpeech ? 'Slow (0.7x)' : 'Normal';
+            document.getElementById('speedBtn').querySelector('span:first-child').textContent = isSlowSpeech ? '🐢' : '🐇';
+            playTone('tap');
+        }
+
+        function toggleAudioFX() {
+            soundEffectsEnabled = !soundEffectsEnabled;
+            document.getElementById('soundToggleBtn').textContent = soundEffectsEnabled ? '🔊' : '🔇';
+        }
+
+        function speakWord(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'en-US';
+            utter.rate = isSlowSpeech ? 0.72 : 0.95;
+            utter.pitch = 1.0;
+            if (selectedVoice) utter.voice = selectedVoice;
+            window.speechSynthesis.speak(utter);
+        }
+
+        function greetTeacher() {
+            playTone('tap');
+            speakWord("Welcome to Teacher Majed Al-Swaihri's Ordinal Numbers Lesson!");
+        }
+
+        // Initialize Number Bank for Exercise 1
+        function renderExercise1Bank() {
+            const bankContainer = document.getElementById('exercise1Bank');
+            bankContainer.innerHTML = '';
+
+            const available = EXERCISE_1_DATA
+                .map(d => d.target)
+                .filter(num => !Object.values(slotPlacements).includes(num))
+                .sort(() => 0.5 - Math.random());
+
+            document.getElementById('bankCountLabel').textContent = `${available.length} numbers left`;
+
+            available.forEach(num => {
+                const chip = document.createElement('div');
+                chip.className = `ordinal-chip px-3 py-1.5 rounded-full border-2 border-sky-300 bg-white font-black text-sm text-sky-800 shadow-xs flex items-center justify-center ${selectedChipVal === num ? 'selected' : ''}`;
+                chip.textContent = num;
+                chip.draggable = true;
+
+                // Drag support
+                chip.ondragstart = (e) => {
+                    e.dataTransfer.setData('text/plain', num);
+                    selectedChipVal = num;
+                    chip.classList.add('selected');
+                };
+
+                // Tap-to-select support
+                chip.onclick = () => {
+                    playTone('tap');
+                    speakWord(num);
+                    if (selectedChipVal === num) {
+                        selectedChipVal = null;
+                        chip.classList.remove('selected');
+                    } else {
+                        document.querySelectorAll('.ordinal-chip').forEach(c => c.classList.remove('selected'));
+                        selectedChipVal = num;
+                        chip.classList.add('selected');
+                    }
+                };
+
+                bankContainer.appendChild(chip);
+            });
+        }
+
+        // Slot handlers for Exercise 1
+        function handleSlotClick(wordKey) {
+            playTone('tap');
+            const slot = document.getElementById(`slot-${wordKey}`);
+
+            // If slot already has a value, clicking removes it back to the bank
+            if (slotPlacements[wordKey]) {
+                const removedVal = slotPlacements[wordKey];
+                delete slotPlacements[wordKey];
+                slot.textContent = '';
+                slot.classList.remove('eval-correct', 'eval-wrong');
+                renderExercise1Bank();
+                return;
+            }
+
+            // If a chip is currently selected, place it here
+            if (selectedChipVal) {
+                slotPlacements[wordKey] = selectedChipVal;
+                slot.textContent = selectedChipVal;
+                speakWord(selectedChipVal);
+                selectedChipVal = null;
+                renderExercise1Bank();
+            }
+        }
+
+        // Setup drop zones for Exercise 1 slots
+        function setupSlotDropZones() {
+            EXERCISE_1_DATA.forEach(d => {
+                const slot = document.getElementById(`slot-${d.word}`);
+                if (!slot) return;
+
+                slot.ondragover = (e) => {
+                    e.preventDefault();
+                    slot.classList.add('drag-over');
+                };
+                slot.ondragleave = () => {
+                    slot.classList.remove('drag-over');
+                };
+                slot.ondrop = (e) => {
+                    e.preventDefault();
+                    slot.classList.remove('drag-over');
+                    const num = e.dataTransfer.getData('text/plain');
+                    if (num) {
+                        playTone('tap');
+                        slotPlacements[d.word] = num;
+                        slot.textContent = num;
+                        speakWord(num);
+                        selectedChipVal = null;
+                        renderExercise1Bank();
+                    }
+                };
+            });
+        }
+
+        // Word Circling for Exercise 2
+        function selectCircleWord(btnEl, word) {
+            playTone('tap');
+            speakWord(word);
+
+            const row = btnEl.closest('.circle-row');
+            if (!row) return;
+
+            const rowNum = row.getAttribute('data-num');
+            const allBtnsInRow = row.querySelectorAll('.word-circle-btn');
+
+            allBtnsInRow.forEach(b => b.classList.remove('circled', 'eval-correct', 'eval-wrong'));
+            btnEl.classList.add('circled');
+            circleSelections[rowNum] = word;
+        }
+
+        function checkAllAnswers() {
+            let correctCount = 0;
+            const totalCount = 18; // 9 in Ex1 + 9 in Ex2
+
+            // 1. Evaluate Exercise 1 (9 items)
+            EXERCISE_1_DATA.forEach(d => {
+                const slot = document.getElementById(`slot-${d.word}`);
+                if (!slot) return;
+                const placed = slotPlacements[d.word];
+                slot.classList.remove('eval-correct', 'eval-wrong');
+
+                if (placed === d.target) {
+                    correctCount++;
+                    slot.classList.add('eval-correct');
+                } else if (placed) {
+                    slot.classList.add('eval-wrong');
+                }
+            });
+
+            // 2. Evaluate Exercise 2 (9 items)
+            const rows = document.querySelectorAll('.circle-row');
+            rows.forEach(r => {
+                const num = r.getAttribute('data-num');
+                const target = r.getAttribute('data-correct');
+                const selected = circleSelections[num];
+                const btns = r.querySelectorAll('.word-circle-btn');
+
+                btns.forEach(b => {
+                    b.classList.remove('eval-correct', 'eval-wrong');
+                    if (b.classList.contains('circled')) {
+                        if (b.textContent.trim() === target) {
+                            correctCount++;
+                            b.classList.add('eval-correct');
+                        } else {
+                            b.classList.add('eval-wrong');
+                        }
+                    }
+                });
+            });
+
+            // Update score
+            document.getElementById('liveScoreLabel').textContent = correctCount;
+            const statusEl = document.getElementById('statusMessage');
+
+            if (correctCount === totalCount) {
+                playTone('correct');
+                // Strictly speak "Correct" only
+                speakWord("Correct");
+                statusEl.innerHTML = `<span class="text-emerald-600 font-black text-sm">🎉 Excellent! مبروك الدرجة الكاملة (${correctCount}/${totalCount})!</span>`;
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+            } else {
+                playTone('wrong');
+                statusEl.innerHTML = `<span class="text-sky-700 font-black text-sm">أحسنت محاولة! نتيجتك: (${correctCount}/${totalCount}) - راجع الإجابات المحددة بالأحمر ⭐</span>`;
+            }
+        }
+
+        function resetWorksheet() {
+            playTone('tap');
+            selectedChipVal = null;
+            slotPlacements = {};
+            circleSelections = {};
+
+            // Clear Exercise 1 slots
+            EXERCISE_1_DATA.forEach(d => {
+                const slot = document.getElementById(`slot-${d.word}`);
+                if (slot) {
+                    slot.textContent = '';
+                    slot.classList.remove('eval-correct', 'eval-wrong', 'drag-over');
+                }
+            });
+
+            // Clear Exercise 2 circles
+            document.querySelectorAll('.word-circle-btn').forEach(b => {
+                b.classList.remove('circled', 'eval-correct', 'eval-wrong');
+            });
+
+            document.getElementById('liveScoreLabel').textContent = '0';
+            document.getElementById('statusMessage').textContent = 'املأ الفراغات وضع دائرة حول الكلمات ثم اضغط فحص الإجابات ⭐';
+            renderExercise1Bank();
+        }
+
+        // Initialize on window load
+        window.onload = function() {
+            renderExercise1Bank();
+            setupSlotDropZones();
+        };
+    </script>
+</body>
+</html>
